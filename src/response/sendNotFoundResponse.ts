@@ -6,7 +6,7 @@ export const sendNotFoundResponse = (response: ServerResponse, errorMessage: str
     response.writeHead(
         STATUS_CODE,
         { 
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
         }
     );
     response.end(errorMessage);

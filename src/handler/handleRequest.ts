@@ -1,14 +1,20 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { BadRequestError } from '../error/BadRequest';
-import { NotFoundError } from '../error/NotFound';
+import { BadRequestError } from '../error/BadRequestError';
+import { NotFoundError } from '../error/NotFoundError';
+import { sendBadRequestResponse } from '../response/sendBadRequestResponse';
+import { sendInternalErrorResponse } from '../response/sendInternalErrorResponse';
 import { sendNotFoundResponse } from '../response/sendNotFoundResponse';
 
 export const handleRequest = async (request: IncomingMessage, response: ServerResponse): Promise<void> => {
     try {
         const pathName: string = getPathName(request);
-        console.log(request.method, pathName);
+        const method: string = request.method ?? '';
+        console.log(method, pathName);
 
-        throw new NotFoundError('Page not found.');
+        // choose controller (aka router)
+        // if nothing match -> throw new NotFoundError('Page not found.');
+
+        // get request body in controller
     } catch (error) {
         if (error instanceof NotFoundError) {
             sendNotFoundResponse(response, error.message);
@@ -16,18 +22,16 @@ export const handleRequest = async (request: IncomingMessage, response: ServerRe
         }
 
         if (error instanceof BadRequestError) {
-            sendNotFoundResponse(response, error.message);
+            sendBadRequestResponse(response, error.message);
             return;
         }
+
+        sendInternalErrorResponse(response);
     }
-
-
-
-
 
     // response.writeHead(200, { 'Content-Type': 'application/json' });
     // response.end(JSON.stringify({
-    //     data: 'Hello from Request handler!'
+    //     data: 'Should be data here.'
     // }));
 };
 
@@ -43,7 +47,3 @@ const getPathName = (request: IncomingMessage): string => {
 const trimSlashes = (str: string): string => {
     return str.replace(/^\/*|\/*$/g, '');
 }
-
-// const parsedData = JSON.parse(rawData);
-
-
