@@ -11,7 +11,7 @@ export const create = async (
     // get request body in controller, await
     const data = {};
 
-    // validate
+    // validate, check required fields
     if (false) {
         throw new BadRequestError('Invalid user data.');
     }

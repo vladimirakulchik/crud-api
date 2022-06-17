@@ -9,7 +9,7 @@ export const runController = async (
     response: ServerResponse
 ): Promise<void> => {
     if ('api/users' === pathName && 'GET' === method) {
-        await userController.getAll(request, response);
+        await userController.getAll(request, response); // move request from all controllers
         return;
     }
 
@@ -18,5 +18,17 @@ export const runController = async (
         return;
     }
 
+    const isMatched: string[] | null = matchUserRoute(pathName);
+
+    if (isMatched && 'GET' === method) {
+        const id: string = isMatched[1];
+        await userController.get(request, response, id);
+        return;
+    }
+
     throw new NotFoundError('Page not found.');
+};
+
+const matchUserRoute = (pathName: string): string[] | null => {
+    return pathName.match(/^api\/users\/([^\/]+)$/);
 };
