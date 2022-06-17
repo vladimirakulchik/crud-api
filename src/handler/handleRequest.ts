@@ -1,12 +1,15 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import * as controllers from '../controller/index';
 import { BadRequestError } from '../error/BadRequestError';
 import { NotFoundError } from '../error/NotFoundError';
 import { sendBadRequestResponse } from '../response/sendBadRequestResponse';
 import { sendInternalErrorResponse } from '../response/sendInternalErrorResponse';
 import { sendNotFoundResponse } from '../response/sendNotFoundResponse';
+import { runController } from './runController';
 
-export const handleRequest = async (request: IncomingMessage, response: ServerResponse): Promise<void> => {
+export const handleRequest = async (
+    request: IncomingMessage,
+    response: ServerResponse
+): Promise<void> => {
     try {
         const pathName: string = getPathName(request);
         const method: string = request.method ?? '';
@@ -15,33 +18,17 @@ export const handleRequest = async (request: IncomingMessage, response: ServerRe
         await runController(pathName, method, request, response);
     } catch (error) {
         if (error instanceof NotFoundError) {
-            sendNotFoundResponse(response, error.message);
+            sendNotFoundResponse(response, error);
             return;
         }
 
         if (error instanceof BadRequestError) {
-            sendBadRequestResponse(response, error.message);
+            sendBadRequestResponse(response, error);
             return;
         }
 
         sendInternalErrorResponse(response);
     }
-};
-
-const runController = async (
-    pathName: string, 
-    method: string, 
-    request: IncomingMessage,
-    response: ServerResponse
-): Promise<void> => {
-    if ('api/users' === pathName && 'GET' === method) {
-        await controllers.getAllUsers(request, response);
-        return;
-    }
-
-    // get request body in controller
-
-    throw new NotFoundError('Page not found.');
 };
 
 const getPathName = (request: IncomingMessage): string => {

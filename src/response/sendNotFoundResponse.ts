@@ -1,13 +1,12 @@
 import { ServerResponse } from 'http';
+import { NotFoundError } from '../error/NotFoundError';
+import { sendResponse } from './sendResponse';
 
 const STATUS_CODE: number = 404;
 
-export const sendNotFoundResponse = (response: ServerResponse, errorMessage: string): void => {
-    response.writeHead(
-        STATUS_CODE,
-        { 
-            'Content-Type': 'application/json'
-        }
-    );
-    response.end(errorMessage);
+export const sendNotFoundResponse = (
+    response: ServerResponse,
+    error: NotFoundError
+): void => {
+    sendResponse(response, STATUS_CODE, error.message);
 };
