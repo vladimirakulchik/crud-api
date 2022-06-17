@@ -1,4 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
+import * as controllers from '../controller/index';
 import { BadRequestError } from '../error/BadRequestError';
 import { NotFoundError } from '../error/NotFoundError';
 import { sendBadRequestResponse } from '../response/sendBadRequestResponse';
@@ -11,10 +12,7 @@ export const handleRequest = async (request: IncomingMessage, response: ServerRe
         const method: string = request.method ?? '';
         console.log(method, pathName);
 
-        // choose controller (aka router)
-        // if nothing match -> throw new NotFoundError('Page not found.');
-
-        // get request body in controller
+        await runController(pathName, method, request, response);
     } catch (error) {
         if (error instanceof NotFoundError) {
             sendNotFoundResponse(response, error.message);
@@ -28,11 +26,22 @@ export const handleRequest = async (request: IncomingMessage, response: ServerRe
 
         sendInternalErrorResponse(response);
     }
+};
 
-    // response.writeHead(200, { 'Content-Type': 'application/json' });
-    // response.end(JSON.stringify({
-    //     data: 'Should be data here.'
-    // }));
+const runController = async (
+    pathName: string, 
+    method: string, 
+    request: IncomingMessage,
+    response: ServerResponse
+): Promise<void> => {
+    if ('api/users' === pathName && 'GET' === method) {
+        await controllers.getAllUsers(request, response);
+        return;
+    }
+
+    // get request body in controller
+
+    throw new NotFoundError('Page not found.');
 };
 
 const getPathName = (request: IncomingMessage): string => {
@@ -45,5 +54,5 @@ const getPathName = (request: IncomingMessage): string => {
 };
 
 const trimSlashes = (str: string): string => {
-    return str.replace(/^\/*|\/*$/g, '');
+    return str.replace(/^\/?|\/?$/g, '');
 }
