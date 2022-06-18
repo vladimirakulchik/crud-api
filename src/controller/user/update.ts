@@ -1,7 +1,6 @@
 import { ServerResponse } from 'http';
 import { User } from '../../entity/User';
 import { UserCollection } from '../../entity/UserCollection';
-import { BadRequestError } from '../../error/BadRequestError';
 import { NotFoundError } from '../../error/NotFoundError';
 import { RequestBody } from '../../handler/RequestBody';
 import { createUserFromRequest } from '../../helper/createUserFromRequest';

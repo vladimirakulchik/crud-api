@@ -31,18 +31,31 @@ export class UserCollection {
         });
     }
 
-    public async update(newUser: User): Promise<void> {
-        const index = this.items.findIndex((user) => {
-            return user.getId() === newUser.getId();
-        });
-        this.items[index] = newUser;
-    }
-
     public async exist(id: string): Promise<boolean> {
-        const index = this.items.findIndex((user) => {
-            return user.getId() === id;
-        });
+        const index = await this.findIndex(id);
 
         return index >= 0;
+    }
+
+    public async update(newUser: User): Promise<void> {
+        const index = await this.findIndex(newUser.getId());
+
+        if (index >= 0) {
+            this.items[index] = newUser;
+        }
+    }
+
+    public async delete(id: string): Promise<void> {
+        const index = await this.findIndex(id);
+
+        if (index >= 0) {
+            this.items.splice(index, 1);
+        }
+    }
+
+    private async findIndex(id: string): Promise<number> {
+        return this.items.findIndex((user) => {
+            return user.getId() === id;
+        });
     }
 }

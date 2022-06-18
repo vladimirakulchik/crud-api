@@ -1,27 +1,25 @@
-import { IncomingMessage, ServerResponse } from 'http';
-import { BadRequestError } from '../../error/BadRequestError';
+import { ServerResponse } from 'http';
+import { UserCollection } from '../../entity/UserCollection';
 import { NotFoundError } from '../../error/NotFoundError';
+import { validateUserId } from '../../helper/validateUserId';
 import { sendResponse } from '../../response/sendResponse';
 
-const STATUS_CODE_OK: number = 204;
+const STATUS_CODE: number = 204;
 
 export const deleteUser = async (
-    request: IncomingMessage,
     response: ServerResponse,
     id: string
 ): Promise<void> => {
-    // validate uuid
-    if (false) {
-        throw new BadRequestError('Invalid uuid.');
-    }
+    validateUserId(id);
 
-    // await, from DB
-    const user = {};
+    const users: UserCollection = UserCollection.getInstance();
+    const userExist: boolean = await users.exist(id);
 
-    // validate user
-    if (false) {
+    if (!userExist) {
         throw new NotFoundError('User not found.');
     }
 
-    sendResponse(response, STATUS_CODE_OK, JSON.stringify(user));
+    await users.delete(id);
+
+    sendResponse(response, STATUS_CODE);
 };

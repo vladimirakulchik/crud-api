@@ -27,9 +27,6 @@ export const runController = async (
     const matchedData: string[] | null = matchUserRoute(pathName);
     const userId: string = matchedData ? matchedData[1] : '';
 
-
-    // remove request from all controllers, use id and body
-
     // path: api/users/{userId}
     if (matchedData) {
         if ('GET' === method) {
@@ -43,7 +40,7 @@ export const runController = async (
         }
 
         if ('DELETE' === method) {
-            await userController.deleteUser(request, response, userId);
+            await userController.deleteUser(response, userId);
             return;
         }
     }
