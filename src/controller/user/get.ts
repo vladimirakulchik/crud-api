@@ -1,25 +1,22 @@
-import { IncomingMessage, ServerResponse } from 'http';
-import { BadRequestError } from '../../error/BadRequestError';
+import { ServerResponse } from 'http';
+import { User } from '../../entity/User';
+import { UserCollection } from '../../entity/UserCollection';
 import { NotFoundError } from '../../error/NotFoundError';
+import { validateUserId } from '../../helper/validateUserId';
 import { sendResponse } from '../../response/sendResponse';
 
 const STATUS_CODE_OK: number = 200;
 
 export const get = async (
-    request: IncomingMessage,
     response: ServerResponse,
     id: string
 ): Promise<void> => {
-    // validate uuid
-    if (false) {
-        throw new BadRequestError('Invalid uuid.');
-    }
+    validateUserId(id);
 
-    // await, from DB
-    const user = {};
+    const users: UserCollection = UserCollection.getInstance();
+    const user: User | undefined = await users.findById(id);
 
-    // validate user
-    if (false) {
+    if (!user) {
         throw new NotFoundError('User not found.');
     }
 

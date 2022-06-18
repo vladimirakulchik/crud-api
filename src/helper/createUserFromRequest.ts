@@ -22,7 +22,7 @@ export const createUserFromRequest = (body: RequestBody, id: string): User => {
     return new User(body.username, body.age, body.hobbies, id);
 };
 
-const isEmptyBody = (body: RequestBody) => {
+const isEmptyBody = (body: RequestBody): boolean => {
     return Object.keys(body).length === 0;
 };
 

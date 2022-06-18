@@ -12,8 +12,6 @@ export const runController = async (
 ): Promise<void> => {
     const body: RequestBody = await getRequestBody(request);
 
-    // remove request from all controllers, use id and body
-
     if ('api/users' === pathName) {
         if ('GET' === method) {
             await userController.getAll(response);
@@ -27,21 +25,27 @@ export const runController = async (
     }
 
     const matchedData: string[] | null = matchUserRoute(pathName);
-    const id: string = matchedData ? matchedData[1] : '';
+    const userId: string = matchedData ? matchedData[1] : '';
 
-    if (matchedData && 'GET' === method) {
-        await userController.get(request, response, id);
-        return;
-    }
 
-    if (matchedData && 'PUT' === method) {
-        await userController.update(request, response, id);
-        return;
-    }
+    // remove request from all controllers, use id and body
 
-    if (matchedData && 'DELETE' === method) {
-        await userController.deleteUser(request, response, id);
-        return;
+    // api/users/{userId}
+    if (matchedData) {
+        if ('GET' === method) {
+            await userController.get(response, userId);
+            return;
+        }
+
+        if ('PUT' === method) {
+            await userController.update(request, response, userId);
+            return;
+        }
+
+        if ('DELETE' === method) {
+            await userController.deleteUser(request, response, userId);
+            return;
+        }
     }
 
     throw new NotFoundError('Page not found.');

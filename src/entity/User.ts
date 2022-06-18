@@ -10,4 +10,8 @@ export class User {
         this.age = age;
         this.hobbies = hobbies;
     }
+
+    public getId(): string {
+        return this.id ?? '';
+    }
 };

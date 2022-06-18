@@ -24,4 +24,10 @@ export class UserCollection {
     public async add(user: User): Promise<void> {
         this.items.push(user);
     }
+
+    public async findById(id: string): Promise<User | undefined> {
+        return this.items.find((user) => {
+            return user.getId() === id;
+        });
+    }
 }
