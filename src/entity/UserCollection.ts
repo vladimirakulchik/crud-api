@@ -30,4 +30,19 @@ export class UserCollection {
             return user.getId() === id;
         });
     }
+
+    public async update(newUser: User): Promise<void> {
+        const index = this.items.findIndex((user) => {
+            return user.getId() === newUser.getId();
+        });
+        this.items[index] = newUser;
+    }
+
+    public async exist(id: string): Promise<boolean> {
+        const index = this.items.findIndex((user) => {
+            return user.getId() === id;
+        });
+
+        return index >= 0;
+    }
 }

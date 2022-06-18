@@ -1,27 +1,31 @@
-import { IncomingMessage, ServerResponse } from 'http';
+import { ServerResponse } from 'http';
+import { User } from '../../entity/User';
+import { UserCollection } from '../../entity/UserCollection';
 import { BadRequestError } from '../../error/BadRequestError';
 import { NotFoundError } from '../../error/NotFoundError';
+import { RequestBody } from '../../handler/RequestBody';
+import { createUserFromRequest } from '../../helper/createUserFromRequest';
+import { validateUserId } from '../../helper/validateUserId';
 import { sendResponse } from '../../response/sendResponse';
 
 const STATUS_CODE_OK: number = 200;
 
 export const update = async (
-    request: IncomingMessage,
     response: ServerResponse,
-    id: string
+    id: string,
+    body: RequestBody
 ): Promise<void> => {
-    // validate uuid
-    if (false) {
-        throw new BadRequestError('Invalid uuid.');
-    }
+    validateUserId(id);
 
-    // await, from DB
-    const user = {};
+    const users: UserCollection = UserCollection.getInstance();
+    const userExist: boolean = await users.exist(id);
 
-    // validate user
-    if (false) {
+    if (!userExist) {
         throw new NotFoundError('User not found.');
     }
 
-    sendResponse(response, STATUS_CODE_OK, JSON.stringify(user));
+    const newUser: User = createUserFromRequest(body, id);
+    users.update(newUser);
+
+    sendResponse(response, STATUS_CODE_OK, JSON.stringify(newUser));
 };

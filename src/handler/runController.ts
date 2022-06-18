@@ -30,7 +30,7 @@ export const runController = async (
 
     // remove request from all controllers, use id and body
 
-    // api/users/{userId}
+    // path: api/users/{userId}
     if (matchedData) {
         if ('GET' === method) {
             await userController.get(response, userId);
@@ -38,7 +38,7 @@ export const runController = async (
         }
 
         if ('PUT' === method) {
-            await userController.update(request, response, userId);
+            await userController.update(response, userId, body);
             return;
         }
 
