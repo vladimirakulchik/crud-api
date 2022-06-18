@@ -16,7 +16,7 @@ export const runController = async (
 
     if ('api/users' === pathName) {
         if ('GET' === method) {
-            await userController.getAll(request, response);
+            await userController.getAll(response);
             return;
         }
 
