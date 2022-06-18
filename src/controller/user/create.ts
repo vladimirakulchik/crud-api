@@ -1,25 +1,22 @@
-import { IncomingMessage, ServerResponse } from 'http';
-import { BadRequestError } from '../../error/BadRequestError';
+import { v4 as generateId } from 'uuid';
+import { ServerResponse } from 'http';
+import { User } from '../../entity/User';
+import { RequestBody } from '../../handler/RequestBody';
+import { createUserFromRequest } from '../../helper/createUserFromRequest';
 import { sendResponse } from '../../response/sendResponse';
+import { UserCollection } from '../../entity/UserCollection';
 
 const STATUS_CODE_CREATED: number = 201;
 
 export const create = async (
-    request: IncomingMessage,
-    response: ServerResponse
+    response: ServerResponse,
+    body: RequestBody
 ): Promise<void> => {
-    // get request body in controller, await
-    const data = {};
+    const id = generateId();
+    const user: User = createUserFromRequest(body, id);
 
-    // validate, check required fields
-    if (false) {
-        throw new BadRequestError('Invalid user data.');
-    }
-
-    // and create user
-    const user = data;
-
-    // save to DB, await
+    const users: UserCollection = UserCollection.getInstance();
+    await users.add(user);
 
     sendResponse(response, STATUS_CODE_CREATED, JSON.stringify(user));
 };

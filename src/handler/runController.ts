@@ -21,7 +21,7 @@ export const runController = async (
         }
 
         if ('POST' === method) {
-            await userController.create(request, response);
+            await userController.create(response, body);
             return;
         }
     }
