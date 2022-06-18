@@ -3,7 +3,7 @@ import { ServerResponse } from 'http';
 export const sendResponse = (
     response: ServerResponse,
     code: number,
-    data: string
+    data?: string
 ): void => {
     response.writeHead(
         code,

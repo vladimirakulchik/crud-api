@@ -1,6 +1,8 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import * as userController from '../controller/user/index';
 import { NotFoundError } from '../error/NotFoundError';
+import { getRequestBody } from './getRequestBody';
+import { RequestBody } from './RequestBody';
 
 export const runController = async (
     pathName: string, 
@@ -8,21 +10,37 @@ export const runController = async (
     request: IncomingMessage,
     response: ServerResponse
 ): Promise<void> => {
-    if ('api/users' === pathName && 'GET' === method) {
-        await userController.getAll(request, response); // move request from all controllers
-        return;
+    const body: RequestBody = await getRequestBody(request);
+
+    // remove request from all controllers, use id and body
+
+    if ('api/users' === pathName) {
+        if ('GET' === method) {
+            await userController.getAll(request, response);
+            return;
+        }
+
+        if ('POST' === method) {
+            await userController.create(request, response);
+            return;
+        }
     }
 
-    if ('api/users' === pathName && 'POST' === method) {
-        await userController.create(request, response);
-        return;
-    }
+    const matchedData: string[] | null = matchUserRoute(pathName);
+    const id: string = matchedData ? matchedData[1] : '';
 
-    const isMatched: string[] | null = matchUserRoute(pathName);
-
-    if (isMatched && 'GET' === method) {
-        const id: string = isMatched[1];
+    if (matchedData && 'GET' === method) {
         await userController.get(request, response, id);
+        return;
+    }
+
+    if (matchedData && 'PUT' === method) {
+        await userController.update(request, response, id);
+        return;
+    }
+
+    if (matchedData && 'DELETE' === method) {
+        await userController.deleteUser(request, response, id);
         return;
     }
 

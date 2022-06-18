@@ -16,7 +16,7 @@ export const handleRequest = async (
         console.log(method, pathName);
 
         await runController(pathName, method, request, response);
-    } catch (error) {
+    } catch (error: any) {
         if (error instanceof NotFoundError) {
             sendNotFoundResponse(response, error);
             return;
