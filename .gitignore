@@ -1,1 +1,8 @@
-.vscode/
+.vscode
+
+node_modules
+
+# Ignore built ts files
+dist
+
+test/cluster.test.ts
