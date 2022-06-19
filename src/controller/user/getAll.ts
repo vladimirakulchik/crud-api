@@ -9,5 +9,5 @@ export const getAll = async (response: ServerResponse): Promise<void> => {
     const users: UserCollection = UserCollection.getInstance();
     const allUsers: User[] = await users.getAll();
 
-    sendResponse(response, STATUS_CODE_OK, JSON.stringify(allUsers));
+    sendResponse(response, STATUS_CODE_OK, allUsers);
 };

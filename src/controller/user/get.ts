@@ -20,5 +20,5 @@ export const get = async (
         throw new NotFoundError('User not found.');
     }
 
-    sendResponse(response, STATUS_CODE_OK, JSON.stringify(user));
+    sendResponse(response, STATUS_CODE_OK, user);
 };

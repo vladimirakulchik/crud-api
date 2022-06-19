@@ -13,7 +13,7 @@ export const handleRequest = async (
     try {
         const pathName: string = getPathName(request);
         const method: string = request.method ?? '';
-        console.log(method, pathName);
+        // console.log(method, pathName);
 
         await runController(pathName, method, request, response);
     } catch (error: any) {

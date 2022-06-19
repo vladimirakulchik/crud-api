@@ -18,5 +18,5 @@ export const create = async (
     const users: UserCollection = UserCollection.getInstance();
     await users.add(user);
 
-    sendResponse(response, STATUS_CODE_CREATED, JSON.stringify(user));
+    sendResponse(response, STATUS_CODE_CREATED, user);
 };

@@ -26,5 +26,5 @@ export const update = async (
     const newUser: User = createUserFromRequest(body, id);
     users.update(newUser);
 
-    sendResponse(response, STATUS_CODE_OK, JSON.stringify(newUser));
+    sendResponse(response, STATUS_CODE_OK, newUser);
 };
