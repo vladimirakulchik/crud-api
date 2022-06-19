@@ -6,13 +6,13 @@ export default {
     },
     moduleFileExtensions: [
         'ts',
-        'js'
+        'js',
     ],
     transform: {
-        '^.+\\.(ts|tsx)$': 'ts-jest'
+        '^.+\\.ts$': 'ts-jest'
     },
     testMatch: [
-        '**/test/**/*.test.(ts|js)'
+        '**/test/**/*.test.ts'
     ],
     testEnvironment: 'node'
 };
