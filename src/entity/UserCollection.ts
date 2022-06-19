@@ -53,6 +53,24 @@ export class UserCollection {
         }
     }
 
+    public getState(): string {
+        return JSON.stringify(this.items);
+    }
+
+    public updateState(state: string): void {
+        const newItems: User[] = JSON.parse(state).map((item: any) => {
+            return new User(item.username, item.age, item.hobbies, item.id);
+        });
+        const allItems: User[] = [...this.items, ...newItems];
+
+        // filter duplicates
+        this.items = allItems.filter((value: User, index: number, self: User[]) =>
+            index === self.findIndex((item: User) => (
+                item.getId() === value.getId()
+            )
+        ));
+    }
+
     private async findIndex(id: string): Promise<number> {
         return this.items.findIndex((user) => {
             return user.getId() === id;
