@@ -9,8 +9,7 @@ import { handleRequest } from './handler/handleRequest';
 const users: UserCollection = UserCollection.getInstance();
 
 const createWorkers = () => {
-    // const workersCount = cpus().length;
-    const workersCount = 8;
+    const workersCount = cpus().length;
 
     for (let i: number = 0; i < workersCount; i++) {
         let worker: Worker = cluster.fork();
